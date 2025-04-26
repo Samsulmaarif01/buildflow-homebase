@@ -1,10 +1,11 @@
-
 import React from "react";
 import { Task } from "@/types";
 import TaskCard from "./TaskCard";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import TaskChart from "./TaskChart";
+import TeamTimeline from "./TeamTimeline";
 
 type KanbanColumnProps = {
   title: string;
@@ -80,30 +81,50 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ tasks, projectId }) => {
   ];
 
   return (
-    <Card className="border-none shadow-none">
-      <CardHeader>
-        <CardTitle>Kanban Board</CardTitle>
-      </CardHeader>
-      <CardContent className="p-0">
-        <div className="flex h-[500px] gap-4 overflow-x-auto p-4">
-          {columns.map((column) => (
-            <KanbanColumn
-              key={column.id}
-              title={column.title}
-              tasks={column.tasks}
-              color={column.color}
-            />
-          ))}
-          
-          <div className="flex h-full min-w-[280px] flex-col rounded-lg border border-dashed border-muted items-center justify-center">
-            <Button variant="outline">
-              <Plus className="mr-2 h-4 w-4" />
-              Add Column
-            </Button>
+    <div className="space-y-6">
+      <Card className="border-none shadow-none">
+        <CardHeader>
+          <CardTitle>Kanban Board</CardTitle>
+        </CardHeader>
+        <CardContent className="p-0">
+          <div className="flex h-[500px] gap-4 overflow-x-auto p-4">
+            {columns.map((column) => (
+              <KanbanColumn
+                key={column.id}
+                title={column.title}
+                tasks={column.tasks}
+                color={column.color}
+              />
+            ))}
+            
+            <div className="flex h-full min-w-[280px] flex-col rounded-lg border border-dashed border-muted items-center justify-center">
+              <Button variant="outline">
+                <Plus className="mr-2 h-4 w-4" />
+                Add Column
+              </Button>
+            </div>
           </div>
-        </div>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Project Timeline</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <TeamTimeline tasks={tasks} projectId={projectId} />
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Task Progress Overview</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <TaskChart tasks={tasks} projectId={projectId} />
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 
