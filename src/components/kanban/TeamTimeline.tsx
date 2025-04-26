@@ -13,12 +13,17 @@ import {
 import { ChartContainer, ChartTooltip } from "@/components/ui/chart";
 
 type TeamTimelineProps = {
-  tasks: Task[];
-  projectId: string;
+  tasks?: Task[];
+  projectId?: string;
 };
 
-const TeamTimeline: React.FC<TeamTimelineProps> = ({ tasks, projectId }) => {
-  const projectTasks = tasks.filter((task) => task.projectId === projectId);
+const TeamTimeline: React.FC<TeamTimelineProps> = ({ tasks = [], projectId = "all" }) => {
+  // Safely handle the tasks array
+  const taskList = tasks || [];
+  
+  const projectTasks = projectId === "all" 
+    ? taskList 
+    : taskList.filter((task) => task.projectId === projectId);
   
   const chartData = projectTasks.map((task) => ({
     name: task.title,
@@ -26,6 +31,7 @@ const TeamTimeline: React.FC<TeamTimelineProps> = ({ tasks, projectId }) => {
     progress: task.status === "DONE" ? 100 : task.status === "REVIEW" ? 75 : task.status === "IN_PROGRESS" ? 50 : 0,
     start: new Date(task.dueDate).getTime() - 7 * 24 * 60 * 60 * 1000, // Mockup start date 1 week before due date
     end: new Date(task.dueDate).getTime(),
+    taskId: task.id, // Include UUID for referencing
   }));
 
   const config = {
@@ -67,6 +73,9 @@ const TeamTimeline: React.FC<TeamTimelineProps> = ({ tasks, projectId }) => {
                     </p>
                     <p className="text-sm text-muted-foreground">
                       Progress: {data.progress}%
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Task ID: {data.taskId}
                     </p>
                   </div>
                 );

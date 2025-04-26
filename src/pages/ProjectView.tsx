@@ -14,7 +14,10 @@ import { Link } from "react-router-dom";
 const ProjectView = () => {
   const { id } = useParams<{ id: string }>();
   
+  // Find the project by UUID
   const project = projects.find((p) => p.id === id);
+  
+  // Filter related data by project UUID
   const projectDiscussions = discussions.filter((d) => d.projectId === id);
   const projectTasks = tasks.filter((t) => t.projectId === id);
 

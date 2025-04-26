@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Task } from "@/types";
 import TaskCard from "./TaskCard";
@@ -40,14 +41,17 @@ const KanbanColumn: React.FC<KanbanColumnProps> = ({ title, tasks, color }) => {
 };
 
 type KanbanBoardProps = {
-  tasks: Task[];
-  projectId: string;
+  tasks?: Task[];
+  projectId?: string;
 };
 
 const KanbanBoard: React.FC<KanbanBoardProps> = ({ tasks = [], projectId = "all" }) => {
+  // Safely handle the tasks array to prevent the filter error
+  const taskList = tasks || [];
+  
   const filteredTasks = projectId === "all" 
-    ? tasks 
-    : tasks.filter((task) => task.projectId === projectId);
+    ? taskList 
+    : taskList.filter((task) => task.projectId === projectId);
   
   const columns = [
     {
