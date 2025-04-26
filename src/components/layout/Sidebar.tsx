@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Kanban, ListCheck, Calendar, Users, FolderOpen } from "lucide-react";
 
 type SidebarProps = {
@@ -9,16 +9,19 @@ type SidebarProps = {
 };
 
 const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, toggleSidebar }) => {
+  const location = useLocation();
+  const currentPath = location.pathname;
+  
   const sidebarClasses = isSidebarOpen
     ? "translate-x-0"
     : "-translate-x-full md:translate-x-0";
 
   const menuItems = [
     { icon: <ListCheck size={20} />, label: "Dashboard", path: "/" },
-    { icon: <Kanban size={20} />, label: "Kanban Board", path: "/" },
-    { icon: <Calendar size={20} />, label: "Timeline", path: "/" },
-    { icon: <Users size={20} />, label: "Team", path: "/" },
-    { icon: <FolderOpen size={20} />, label: "Files", path: "/" },
+    { icon: <Kanban size={20} />, label: "Kanban Board", path: "/kanban" },
+    { icon: <Calendar size={20} />, label: "Timeline", path: "/timeline" },
+    { icon: <Users size={20} />, label: "Team", path: "/team" },
+    { icon: <FolderOpen size={20} />, label: "Files", path: "/files" },
   ];
 
   return (
@@ -43,16 +46,30 @@ const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, toggleSidebar }) => {
 
           {/* Navigation */}
           <nav className="flex-1 space-y-1 px-3 py-4">
-            {menuItems.map((item, idx) => (
-              <Link
-                key={idx}
-                to={item.path}
-                className="flex items-center rounded-md px-3 py-2 text-sm font-medium text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
-              >
-                <span className="mr-3 text-sidebar-foreground">{item.icon}</span>
-                {item.label}
-              </Link>
-            ))}
+            {menuItems.map((item, idx) => {
+              const isActive = currentPath === item.path;
+              return (
+                <Link
+                  key={idx}
+                  to={item.path}
+                  className={`flex items-center rounded-md px-3 py-2 text-sm font-medium ${
+                    isActive
+                      ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                      : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                  }`}
+                  onClick={() => {
+                    if (window.innerWidth < 768) {
+                      toggleSidebar();
+                    }
+                  }}
+                >
+                  <span className={`mr-3 ${isActive ? "text-sidebar-accent-foreground" : "text-sidebar-foreground"}`}>
+                    {item.icon}
+                  </span>
+                  {item.label}
+                </Link>
+              );
+            })}
           </nav>
 
           {/* User info */}
@@ -72,4 +89,3 @@ const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, toggleSidebar }) => {
 };
 
 export default Sidebar;
-
