@@ -44,39 +44,35 @@ type KanbanBoardProps = {
   projectId: string;
 };
 
-const KanbanBoard: React.FC<KanbanBoardProps> = ({ tasks, projectId }) => {
+const KanbanBoard: React.FC<KanbanBoardProps> = ({ tasks = [], projectId = "all" }) => {
+  const filteredTasks = projectId === "all" 
+    ? tasks 
+    : tasks.filter((task) => task.projectId === projectId);
+  
   const columns = [
     {
       id: "TO_DO",
       title: "To Do",
       color: "bg-status-todo",
-      tasks: tasks.filter(
-        (task) => task.projectId === projectId && task.status === "TO_DO"
-      ),
+      tasks: filteredTasks.filter(task => task.status === "TO_DO"),
     },
     {
       id: "IN_PROGRESS",
       title: "In Progress",
       color: "bg-status-progress",
-      tasks: tasks.filter(
-        (task) => task.projectId === projectId && task.status === "IN_PROGRESS"
-      ),
+      tasks: filteredTasks.filter(task => task.status === "IN_PROGRESS"),
     },
     {
       id: "REVIEW",
       title: "Review",
       color: "bg-status-review",
-      tasks: tasks.filter(
-        (task) => task.projectId === projectId && task.status === "REVIEW"
-      ),
+      tasks: filteredTasks.filter(task => task.status === "REVIEW"),
     },
     {
       id: "DONE",
       title: "Done",
       color: "bg-status-done",
-      tasks: tasks.filter(
-        (task) => task.projectId === projectId && task.status === "DONE"
-      ),
+      tasks: filteredTasks.filter(task => task.status === "DONE"),
     },
   ];
 
@@ -112,7 +108,7 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ tasks, projectId }) => {
           <CardTitle>Project Timeline</CardTitle>
         </CardHeader>
         <CardContent>
-          <TeamTimeline tasks={tasks} projectId={projectId} />
+          <TeamTimeline tasks={filteredTasks} projectId={projectId} />
         </CardContent>
       </Card>
 
@@ -121,7 +117,7 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ tasks, projectId }) => {
           <CardTitle>Task Progress Overview</CardTitle>
         </CardHeader>
         <CardContent>
-          <TaskChart tasks={tasks} projectId={projectId} />
+          <TaskChart tasks={filteredTasks} projectId={projectId} />
         </CardContent>
       </Card>
     </div>

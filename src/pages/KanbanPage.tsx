@@ -2,8 +2,12 @@
 import React from "react";
 import Layout from "@/components/layout/Layout";
 import KanbanBoard from "@/components/kanban/KanbanBoard";
+import { tasks } from "@/data/mockData";
 
 const KanbanPage = () => {
+  // Using a default projectId for displaying all tasks in Kanban view
+  const defaultProjectId = "all";
+  
   return (
     <Layout>
       <div className="space-y-6">
@@ -14,7 +18,7 @@ const KanbanPage = () => {
           </p>
         </div>
         
-        <KanbanBoard />
+        <KanbanBoard tasks={tasks} projectId={defaultProjectId} />
       </div>
     </Layout>
   );

@@ -2,8 +2,12 @@
 import React from "react";
 import Layout from "@/components/layout/Layout";
 import TeamTimeline from "@/components/kanban/TeamTimeline";
+import { tasks } from "@/data/mockData";
 
 const TimelinePage = () => {
+  // Using a default projectId for displaying all tasks in Timeline view
+  const defaultProjectId = "all";
+  
   return (
     <Layout>
       <div className="space-y-6">
@@ -15,7 +19,7 @@ const TimelinePage = () => {
         </div>
         
         <div className="rounded-lg border border-border bg-card p-4">
-          <TeamTimeline />
+          <TeamTimeline tasks={tasks} projectId={defaultProjectId} />
         </div>
       </div>
     </Layout>
