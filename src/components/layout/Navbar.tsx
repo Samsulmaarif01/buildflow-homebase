@@ -2,12 +2,22 @@
 import React from "react";
 import { Menu, Bell, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import NewProjectDialog from "@/components/project/NewProjectDialog";
+import { Project } from "@/types";
+import { toast } from "sonner";
 
 type NavbarProps = {
   toggleSidebar: () => void;
 };
 
 const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
+  const handleProjectCreate = (newProject: Project) => {
+    // In a real app, you'd likely dispatch this to a state management system 
+    // or send it to an API. For now, we'll just log it.
+    console.log("New Project Created:", newProject);
+    // You could also update the projects list in your data source
+  };
+
   return (
     <header className="sticky top-0 z-10 border-b border-border bg-background">
       <div className="flex h-16 items-center px-4 md:px-6">
@@ -39,7 +49,7 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
             <Bell className="h-4 w-4" />
             <span className="sr-only">Notifications</span>
           </Button>
-          <Button>New Project</Button>
+          <NewProjectDialog onProjectCreate={handleProjectCreate} />
         </div>
       </div>
     </header>
