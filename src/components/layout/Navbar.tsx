@@ -4,7 +4,7 @@ import { Menu, Bell, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import NewProjectDialog from "@/components/project/NewProjectDialog";
 import { Project } from "@/types";
-import { toast } from "sonner";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 
 type NavbarProps = {
   toggleSidebar: () => void;
@@ -45,6 +45,7 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
         </div>
 
         <div className="flex items-center gap-2 md:gap-4">
+          <ThemeToggle />
           <Button variant="outline" size="icon">
             <Bell className="h-4 w-4" />
             <span className="sr-only">Notifications</span>
