@@ -42,6 +42,17 @@ const TaskChart: React.FC<TaskChartProps> = ({ tasks, projectId }) => {
     },
   };
 
+  // Check if there's any data to display
+  const hasData = chartData.some(item => item.value > 0);
+
+  if (!hasData) {
+    return (
+      <div className="h-[300px] w-full flex items-center justify-center">
+        <p className="text-muted-foreground">No task data available</p>
+      </div>
+    );
+  }
+
   return (
     <div className="h-[300px] w-full">
       <ChartContainer config={config}>
@@ -52,11 +63,11 @@ const TaskChart: React.FC<TaskChartProps> = ({ tasks, projectId }) => {
               cx="50%"
               cy="50%"
               labelLine={false}
-              outerRadius={100}
+              outerRadius={80}
               fill="#8884d8"
               dataKey="value"
               label={({ name, percent }) => 
-                `${name} ${(percent * 100).toFixed(0)}%`
+                percent > 0.05 ? `${name} ${(percent * 100).toFixed(0)}%` : ""
               }
             >
               {chartData.map((entry, index) => (
@@ -66,7 +77,7 @@ const TaskChart: React.FC<TaskChartProps> = ({ tasks, projectId }) => {
                 />
               ))}
             </Pie>
-            <Legend />
+            <Legend layout="horizontal" verticalAlign="bottom" align="center" />
           </PieChart>
         </ResponsiveContainer>
       </ChartContainer>
