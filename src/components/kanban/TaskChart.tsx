@@ -1,7 +1,7 @@
 
 import React from "react";
 import { Task } from "@/types";
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from "recharts";
+import { PieChart, Pie, Cell, ResponsiveContainer, Label, Tooltip } from "recharts";
 import { ChartContainer } from "@/components/ui/chart";
 
 type TaskChartProps = {
@@ -20,18 +20,18 @@ const TaskChart: React.FC<TaskChartProps> = ({ tasks, projectId }) => {
   };
 
   const chartData = [
-    { name: "To Do", value: statusCounts["TO_DO"] },
-    { name: "In Progress", value: statusCounts["IN_PROGRESS"] },
-    { name: "Review", value: statusCounts["REVIEW"] },
-    { name: "Done", value: statusCounts["DONE"] },
+    { name: "To Do", value: statusCounts["TO_DO"], color: "#000000" }, // Black
+    { name: "In Progress", value: statusCounts["IN_PROGRESS"], color: "#2563EB" }, // Blue
+    { name: "Review", value: statusCounts["REVIEW"], color: "#93c5fd" }, // Light blue
+    { name: "Done", value: statusCounts["DONE"], color: "#86efac" }, // Green
   ];
 
-  const COLORS = [
-    "hsl(var(--warning))",   // To Do
-    "hsl(var(--primary))",   // In Progress
-    "hsl(var(--secondary))", // Review
-    "hsl(var(--success))",   // Done
-  ];
+  // Calculate percentages for each status
+  const total = chartData.reduce((sum, item) => sum + item.value, 0);
+  const chartDataWithPercentages = chartData.map(item => ({
+    ...item,
+    percent: total > 0 ? Math.round((item.value / total) * 100) : 0
+  }));
 
   const config = {
     tasks: {
@@ -43,7 +43,7 @@ const TaskChart: React.FC<TaskChartProps> = ({ tasks, projectId }) => {
   };
 
   // Check if there's any data to display
-  const hasData = chartData.some(item => item.value > 0);
+  const hasData = chartDataWithPercentages.some(item => item.value > 0);
 
   if (!hasData) {
     return (
@@ -53,31 +53,65 @@ const TaskChart: React.FC<TaskChartProps> = ({ tasks, projectId }) => {
     );
   }
 
+  // Custom rendering component for external labels
+  const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index, name, value }) => {
+    if (value === 0) return null;
+    
+    const RADIAN = Math.PI / 180;
+    const radius = outerRadius + 30;
+    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+    
+    return (
+      <>
+        <text 
+          x={x} 
+          y={y} 
+          fill="#000000" 
+          textAnchor={x > cx ? 'start' : 'end'} 
+          dominantBaseline="central"
+          className="text-xs"
+        >
+          {`${name} ${percent}%`}
+        </text>
+      </>
+    );
+  };
+
   return (
     <div className="h-[300px] w-full">
       <ChartContainer config={config}>
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
-              data={chartData}
+              data={chartDataWithPercentages}
               cx="50%"
               cy="50%"
-              labelLine={false}
+              labelLine={true}
               outerRadius={80}
               fill="#8884d8"
               dataKey="value"
-              label={({ name, percent }) => 
-                percent > 0.05 ? `${name} ${(percent * 100).toFixed(0)}%` : ""
-              }
+              label={renderCustomizedLabel}
+              labelLine={{ stroke: "#CCCCCC", strokeWidth: 0.5 }}
+              startAngle={90}
+              endAngle={-270}
             >
-              {chartData.map((entry, index) => (
+              {chartDataWithPercentages.map((entry, index) => (
                 <Cell 
                   key={`cell-${index}`} 
-                  fill={COLORS[index % COLORS.length]} 
+                  fill={entry.color} 
                 />
               ))}
             </Pie>
-            <Legend layout="horizontal" verticalAlign="bottom" align="center" />
+            <Tooltip 
+              formatter={(value, name, props) => [`${value} tasks`, name]}
+              contentStyle={{ 
+                backgroundColor: 'white',
+                border: '1px solid #f0f0f0',
+                borderRadius: '4px',
+                padding: '8px'
+              }}
+            />
           </PieChart>
         </ResponsiveContainer>
       </ChartContainer>
