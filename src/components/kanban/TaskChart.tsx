@@ -6,6 +6,8 @@ import { ChartContainer } from "@/components/ui/chart";
 
 type TaskChartProps = {
   tasks: Task[];
+  // Added projectId prop that was being passed but not defined in the interface
+  projectId?: string;
 };
 
 const TaskChart: React.FC<TaskChartProps> = ({ tasks }) => {

@@ -121,7 +121,7 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ tasks = [], projectId = "all"
           <CardTitle>Task Progress Overview</CardTitle>
         </CardHeader>
         <CardContent>
-          <TaskChart tasks={filteredTasks} projectId={projectId} />
+          <TaskChart tasks={filteredTasks} />
         </CardContent>
       </Card>
     </div>
