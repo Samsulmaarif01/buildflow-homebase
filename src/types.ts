@@ -24,6 +24,8 @@ export type Project = {
   startDate: string;
   endDate: string;
   team: TeamMember[];
+  landArea?: string; // Optional field for land area (LT)
+  buildingArea?: string; // Optional field for building area (LB)
 };
 
 export type TaskStatus = "TO_DO" | "IN_PROGRESS" | "REVIEW" | "DONE";

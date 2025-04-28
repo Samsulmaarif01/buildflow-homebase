@@ -1,23 +1,26 @@
 
 import React from "react";
 import { Task } from "@/types";
-import { PieChart, Pie, Cell, ResponsiveContainer, Label, Tooltip } from "recharts";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import { ChartContainer } from "@/components/ui/chart";
 
 type TaskChartProps = {
   tasks: Task[];
-  projectId: string;
 };
 
-const TaskChart: React.FC<TaskChartProps> = ({ tasks, projectId }) => {
-  const projectTasks = tasks.filter((task) => task.projectId === projectId);
+const TaskChart: React.FC<TaskChartProps> = ({ tasks }) => {
+  // Count tasks by status
+  const statusCounts = tasks.reduce((counts, task) => {
+    const status = task.status;
+    counts[status] = (counts[status] || 0) + 1;
+    return counts;
+  }, {} as Record<string, number>);
   
-  const statusCounts = {
-    "TO_DO": projectTasks.filter(task => task.status === "TO_DO").length,
-    "IN_PROGRESS": projectTasks.filter(task => task.status === "IN_PROGRESS").length,
-    "REVIEW": projectTasks.filter(task => task.status === "REVIEW").length,
-    "DONE": projectTasks.filter(task => task.status === "DONE").length,
-  };
+  // Ensure all statuses are represented
+  statusCounts["TO_DO"] = statusCounts["TO_DO"] || 0;
+  statusCounts["IN_PROGRESS"] = statusCounts["IN_PROGRESS"] || 0;
+  statusCounts["REVIEW"] = statusCounts["REVIEW"] || 0;
+  statusCounts["DONE"] = statusCounts["DONE"] || 0;
 
   const chartData = [
     { name: "To Do", value: statusCounts["TO_DO"], color: "#000000" }, // Black
@@ -35,10 +38,11 @@ const TaskChart: React.FC<TaskChartProps> = ({ tasks, projectId }) => {
 
   const config = {
     tasks: {
-      theme: {
-        light: "hsl(var(--primary))",
-        dark: "hsl(var(--primary))",
-      },
+      type: "donut",
+      height: "100%",
+      width: "100%",
+      color: "indigo",
+      animated: true,
     },
   };
 
@@ -47,14 +51,15 @@ const TaskChart: React.FC<TaskChartProps> = ({ tasks, projectId }) => {
 
   if (!hasData) {
     return (
-      <div className="h-[300px] w-full flex items-center justify-center">
-        <p className="text-muted-foreground">No task data available</p>
+      <div className="flex h-[300px] w-full items-center justify-center text-center text-muted-foreground">
+        No tasks available
       </div>
     );
   }
 
   // Custom rendering component for external labels
-  const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index, name, value }) => {
+  const renderCustomizedLabel = (props) => {
+    const { cx, cy, midAngle, innerRadius, outerRadius, percent, index, name, value } = props;
     if (value === 0) return null;
     
     const RADIAN = Math.PI / 180;
@@ -104,7 +109,7 @@ const TaskChart: React.FC<TaskChartProps> = ({ tasks, projectId }) => {
               ))}
             </Pie>
             <Tooltip 
-              formatter={(value, name, props) => [`${value} tasks`, name]}
+              formatter={(value, name) => [`${value} tasks`, name]}
               contentStyle={{ 
                 backgroundColor: 'white',
                 border: '1px solid #f0f0f0',
