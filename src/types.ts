@@ -1,10 +1,38 @@
 
 export type ProjectStatus = "PLANNING" | "IN_PROGRESS" | "REVIEW" | "COMPLETED";
 
+export type Role = {
+  id: string;
+  name: string;
+  permissions: Permission[];
+};
+
+export type Division = {
+  id: string;
+  name: string;
+  description?: string;
+};
+
+export type Permission = 
+  | "VIEW_PROJECTS" 
+  | "CREATE_PROJECTS" 
+  | "EDIT_PROJECTS" 
+  | "DELETE_PROJECTS"
+  | "VIEW_TASKS" 
+  | "CREATE_TASKS" 
+  | "EDIT_TASKS" 
+  | "DELETE_TASKS"
+  | "MANAGE_MEMBERS" 
+  | "MANAGE_ROLES"
+  | "MANAGE_DIVISIONS";
+
 export type TeamMember = {
   id: string; // UUID string format
   name: string;
   role: string;
+  division?: string;
+  email?: string;
+  phone?: string;
 };
 
 export type Location = {

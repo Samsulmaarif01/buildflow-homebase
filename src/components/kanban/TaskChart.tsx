@@ -58,7 +58,7 @@ const TaskChart: React.FC<TaskChartProps> = ({ tasks }) => {
   }
 
   // Custom rendering component for external labels
-  const renderCustomizedLabel = (props) => {
+  const renderCustomizedLabel = (props: any) => {
     const { cx, cy, midAngle, innerRadius, outerRadius, percent, index, name, value } = props;
     if (value === 0) return null;
     
@@ -68,18 +68,17 @@ const TaskChart: React.FC<TaskChartProps> = ({ tasks }) => {
     const y = cy + radius * Math.sin(-midAngle * RADIAN);
     
     return (
-      <>
-        <text 
-          x={x} 
-          y={y} 
-          fill="#000000" 
-          textAnchor={x > cx ? 'start' : 'end'} 
-          dominantBaseline="central"
-          className="text-xs"
-        >
-          {`${name} ${percent}%`}
-        </text>
-      </>
+      <text 
+        key={`label-${index}`}
+        x={x} 
+        y={y} 
+        fill="#000000" 
+        textAnchor={x > cx ? 'start' : 'end'} 
+        dominantBaseline="central"
+        className="text-xs"
+      >
+        {`${name} ${percent}%`}
+      </text>
     );
   };
 
