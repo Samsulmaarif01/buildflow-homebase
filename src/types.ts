@@ -1,10 +1,10 @@
-
 export type ProjectStatus = "PLANNING" | "IN_PROGRESS" | "REVIEW" | "COMPLETED";
 
 export type Role = {
   id: string;
   name: string;
   permissions: Permission[];
+  divisions: string[]; // Array of division IDs that this role can access
 };
 
 export type Division = {

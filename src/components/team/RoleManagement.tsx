@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -39,6 +38,7 @@ const defaultRoles: Role[] = [
     id: generateUUID(),
     name: "Admin",
     permissions: [...defaultPermissions],
+    divisions: ["1", "2", "3", "4"],
   },
   {
     id: generateUUID(),
@@ -52,11 +52,13 @@ const defaultRoles: Role[] = [
       "EDIT_TASKS",
       "MANAGE_MEMBERS"
     ],
+    divisions: ["1", "2", "3", "4"],
   },
   {
     id: generateUUID(),
     name: "Team Member",
     permissions: ["VIEW_PROJECTS", "VIEW_TASKS", "EDIT_TASKS"],
+    divisions: ["3"],
   },
 ];
 
@@ -93,6 +95,7 @@ const RoleManagement: React.FC = () => {
   const [newDivisionDesc, setNewDivisionDesc] = useState("");
   const [editingRole, setEditingRole] = useState<Role | null>(null);
   const [editingDivision, setEditingDivision] = useState<Division | null>(null);
+  const [selectedDivisions, setSelectedDivisions] = useState<string[]>([]);
 
   const form = useForm<{ permissions: Permission[] }>({
     defaultValues: {
@@ -110,14 +113,25 @@ const RoleManagement: React.FC = () => {
       return;
     }
 
+    if (selectedDivisions.length === 0) {
+      toast({
+        title: "Error",
+        description: "Please select at least one division",
+        variant: "destructive",
+      });
+      return;
+    }
+
     const newRole: Role = {
       id: generateUUID(),
       name: newRoleName,
       permissions: [],
+      divisions: selectedDivisions,
     };
 
     setRoles([...roles, newRole]);
     setNewRoleName("");
+    setSelectedDivisions([]);
     toast({
       title: "Role Added",
       description: `${newRoleName} role has been added`,
@@ -243,16 +257,39 @@ const RoleManagement: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle>Add New Role</CardTitle>
-              <CardDescription>Create a new role with specific permissions</CardDescription>
+              <CardDescription>Create a new role with specific permissions and divisions</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="flex items-center gap-2">
-                <Input
-                  placeholder="Role name"
-                  value={newRoleName}
-                  onChange={(e) => setNewRoleName(e.target.value)}
-                />
-                <Button onClick={handleAddRole} className="shrink-0">
+              <div className="space-y-4">
+                <div className="flex items-center gap-2">
+                  <Input
+                    placeholder="Role name"
+                    value={newRoleName}
+                    onChange={(e) => setNewRoleName(e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Divisions</Label>
+                  <div className="grid grid-cols-2 gap-2">
+                    {divisions.map((division) => (
+                      <div key={division.id} className="flex items-center space-x-2">
+                        <Checkbox
+                          id={`division-${division.id}`}
+                          checked={selectedDivisions.includes(division.id)}
+                          onCheckedChange={(checked) => {
+                            if (checked) {
+                              setSelectedDivisions([...selectedDivisions, division.id]);
+                            } else {
+                              setSelectedDivisions(selectedDivisions.filter(id => id !== division.id));
+                            }
+                          }}
+                        />
+                        <Label htmlFor={`division-${division.id}`}>{division.name}</Label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <Button onClick={handleAddRole} className="w-full">
                   <PlusCircle className="h-4 w-4 mr-2" /> Add Role
                 </Button>
               </div>
