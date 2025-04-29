@@ -1,21 +1,41 @@
 
 import React from "react";
-import { Menu, Bell, Search } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { Menu, Bell, Search, LogIn, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import NewProjectDialog from "@/components/project/NewProjectDialog";
 import { Project } from "@/types";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
+import { useAuth } from "@/context/AuthContext";
+import { useToast } from "@/components/ui/use-toast";
 
 type NavbarProps = {
   toggleSidebar: () => void;
 };
 
 const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
+  const navigate = useNavigate();
+  const { currentUser, logout, isAuthenticated } = useAuth();
+  const { toast } = useToast();
+
   const handleProjectCreate = (newProject: Project) => {
     // In a real app, you'd likely dispatch this to a state management system 
     // or send it to an API. For now, we'll just log it.
     console.log("New Project Created:", newProject);
     // You could also update the projects list in your data source
+  };
+
+  const handleLogout = () => {
+    logout();
+    toast({
+      title: "Logged out",
+      description: "You have been logged out successfully",
+    });
+    navigate("/login");
+  };
+
+  const handleLogin = () => {
+    navigate("/login");
   };
 
   return (
@@ -50,6 +70,24 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
             <Bell className="h-4 w-4" />
             <span className="sr-only">Notifications</span>
           </Button>
+          
+          {isAuthenticated ? (
+            <>
+              <span className="hidden text-sm md:inline-block">
+                {currentUser?.name} ({currentUser?.role === "1" ? "Admin" : currentUser?.role === "2" ? "Project Manager" : "Team Member"})
+              </span>
+              <Button variant="outline" size="sm" onClick={handleLogout}>
+                <LogOut className="h-4 w-4 mr-1" />
+                Logout
+              </Button>
+            </>
+          ) : (
+            <Button variant="outline" size="sm" onClick={handleLogin}>
+              <LogIn className="h-4 w-4 mr-1" />
+              Login
+            </Button>
+          )}
+          
           <NewProjectDialog onProjectCreate={handleProjectCreate} />
         </div>
       </div>
