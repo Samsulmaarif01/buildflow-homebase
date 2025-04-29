@@ -2,7 +2,7 @@
 import React from "react";
 import Layout from "@/components/layout/Layout";
 import KanbanBoard from "@/components/kanban/KanbanBoard";
-import { tasks } from "@/data/mockData";
+import { TaskProvider } from "@/context/TaskContext";
 
 const KanbanPage = () => {
   // Using a default projectId for displaying all tasks in Kanban view
@@ -18,7 +18,9 @@ const KanbanPage = () => {
           </p>
         </div>
         
-        <KanbanBoard tasks={tasks} projectId={defaultProjectId} />
+        <TaskProvider>
+          <KanbanBoard projectId={defaultProjectId} />
+        </TaskProvider>
       </div>
     </Layout>
   );

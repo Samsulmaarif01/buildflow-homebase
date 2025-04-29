@@ -1,7 +1,7 @@
 
 import React from "react";
 import { useParams } from "react-router-dom";
-import { projects, tasks, discussions } from "@/data/mockData";
+import { projects, discussions } from "@/data/mockData";
 import Layout from "@/components/layout/Layout";
 import ProjectDetail from "@/components/project/ProjectDetail";
 import DiscussionForum from "@/components/forum/DiscussionForum";
@@ -10,6 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { TaskProvider } from "@/context/TaskContext";
 
 const ProjectView = () => {
   const { id } = useParams<{ id: string }>();
@@ -19,7 +20,6 @@ const ProjectView = () => {
   
   // Filter related data by project UUID
   const projectDiscussions = discussions.filter((d) => d.projectId === id);
-  const projectTasks = tasks.filter((t) => t.projectId === id);
 
   if (!project) {
     return (
@@ -57,7 +57,9 @@ const ProjectView = () => {
             <TabsTrigger value="discussion">Discussion</TabsTrigger>
           </TabsList>
           <TabsContent value="kanban" className="mt-4">
-            <KanbanBoard tasks={projectTasks} projectId={project.id} />
+            <TaskProvider>
+              <KanbanBoard projectId={project.id} />
+            </TaskProvider>
           </TabsContent>
           <TabsContent value="discussion" className="mt-4">
             <DiscussionForum discussions={projectDiscussions} projectId={project.id} />

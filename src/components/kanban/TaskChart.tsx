@@ -1,7 +1,6 @@
 
 import React from "react";
 import { Task } from "@/types";
-import { Card } from "@/components/ui/card";
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
 
 type TaskChartProps = {
@@ -29,10 +28,7 @@ const TaskChart: React.FC<TaskChartProps> = ({ tasks }) => {
         <BarChart data={data}>
           <XAxis dataKey="name" />
           <YAxis />
-          <Bar 
-            dataKey="value"
-            className="fill-primary"
-          />
+          <Bar dataKey="value" className="fill-primary" />
         </BarChart>
       </ResponsiveContainer>
     </div>

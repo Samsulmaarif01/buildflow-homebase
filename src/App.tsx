@@ -6,6 +6,7 @@ import { ThemeProvider } from "next-themes";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/context/AuthContext";
+import { TaskProvider } from "@/context/TaskContext";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import LoginPage from "@/pages/LoginPage";
 import Index from "./pages/Index";
@@ -22,46 +23,48 @@ const App = () => (
   <ThemeProvider defaultTheme="system" enableSystem>
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <Routes>
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/" element={
-                <ProtectedRoute>
-                  <Index />
-                </ProtectedRoute>
-              } />
-              <Route path="/project/:id" element={
-                <ProtectedRoute>
-                  <ProjectView />
-                </ProtectedRoute>
-              } />
-              <Route path="/kanban" element={
-                <ProtectedRoute>
-                  <KanbanPage />
-                </ProtectedRoute>
-              } />
-              <Route path="/timeline" element={
-                <ProtectedRoute>
-                  <TimelinePage />
-                </ProtectedRoute>
-              } />
-              <Route path="/team" element={
-                <ProtectedRoute>
-                  <TeamPage />
-                </ProtectedRoute>
-              } />
-              <Route path="/files" element={
-                <ProtectedRoute>
-                  <FilesPage />
-                </ProtectedRoute>
-              } />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
-        </TooltipProvider>
+        <TaskProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <Routes>
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/" element={
+                  <ProtectedRoute>
+                    <Index />
+                  </ProtectedRoute>
+                } />
+                <Route path="/project/:id" element={
+                  <ProtectedRoute>
+                    <ProjectView />
+                  </ProtectedRoute>
+                } />
+                <Route path="/kanban" element={
+                  <ProtectedRoute>
+                    <KanbanPage />
+                  </ProtectedRoute>
+                } />
+                <Route path="/timeline" element={
+                  <ProtectedRoute>
+                    <TimelinePage />
+                  </ProtectedRoute>
+                } />
+                <Route path="/team" element={
+                  <ProtectedRoute>
+                    <TeamPage />
+                  </ProtectedRoute>
+                } />
+                <Route path="/files" element={
+                  <ProtectedRoute>
+                    <FilesPage />
+                  </ProtectedRoute>
+                } />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </BrowserRouter>
+          </TooltipProvider>
+        </TaskProvider>
       </AuthProvider>
     </QueryClientProvider>
   </ThemeProvider>
