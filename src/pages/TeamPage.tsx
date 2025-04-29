@@ -22,16 +22,19 @@ const defaultRoles: Role[] = [
     id: "1",
     name: "Admin",
     permissions: ["VIEW_PROJECTS", "CREATE_PROJECTS", "EDIT_PROJECTS", "DELETE_PROJECTS", "MANAGE_MEMBERS", "MANAGE_ROLES"],
+    divisions: ["1", "2", "3", "4"],
   },
   {
     id: "2",
     name: "Project Manager",
     permissions: ["VIEW_PROJECTS", "CREATE_PROJECTS", "EDIT_PROJECTS", "VIEW_TASKS", "CREATE_TASKS", "EDIT_TASKS"],
+    divisions: ["1", "2", "3", "4"],
   },
   {
     id: "3",
     name: "Team Member",
     permissions: ["VIEW_PROJECTS", "VIEW_TASKS", "EDIT_TASKS"],
+    divisions: ["3"],
   },
 ];
 
