@@ -33,9 +33,22 @@ const ProjectProgress: React.FC<ProjectProgressProps> = ({ team }) => {
     member,
     progress: Math.floor(Math.random() * 100)
   }));
+  
+  // Calculate overall project progress based on team members' progress
+  const overallProgress = memberProgress.length > 0
+    ? Math.round(memberProgress.reduce((sum, mp) => sum + mp.progress, 0) / memberProgress.length)
+    : 0;
 
   return (
     <div className="space-y-4">
+      <div className="mb-6">
+        <div className="flex items-center justify-between mb-1">
+          <span className="text-sm font-medium">Overall Progress</span>
+          <span className="text-sm font-medium">{overallProgress}%</span>
+        </div>
+        <Progress value={overallProgress} className="h-2" />
+      </div>
+      
       <h3 className="font-semibold mb-2">Team Progress</h3>
       <div>
         {memberProgress.map((mp, idx) => (

@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Project } from "@/types";
 import { format } from "date-fns";
@@ -86,14 +85,6 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ project }) => {
           <CardTitle className="text-lg">Project Progress</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="mb-6">
-            <div className="flex items-center justify-between mb-1">
-              <span className="text-sm font-medium">Overall Progress</span>
-              <span className="text-sm font-medium">{project.progress}%</span>
-            </div>
-            <div className="progress-bar" style={{ "--progress-width": `${project.progress}%` } as React.CSSProperties} />
-          </div>
-          
           <ProjectProgress team={project.team} />
         </CardContent>
       </Card>
