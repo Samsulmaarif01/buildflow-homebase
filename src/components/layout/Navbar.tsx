@@ -32,7 +32,7 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
         </Button>
 
         <div className="hidden md:flex md:flex-1">
-          <h1 className="text-xl font-semibold">Project Dashboard</h1>
+          <h1 className="text-xl font-semibold">Project Management</h1>
         </div>
 
         <div className="relative hidden flex-1 md:block">

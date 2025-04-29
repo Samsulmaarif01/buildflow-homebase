@@ -26,7 +26,7 @@ export const projects = [
     client: "Michael Chen",
     location: { lat: -6.190, lng: 106.800, address: "Jakarta, Indonesia" },
     status: "PLANNING" as ProjectStatus,
-    progress: 25,
+    progress: 0,
     description:
       "Complete interior renovation of a 120m² apartment to maximize space efficiency and modernize all fixtures.",
     startDate: "2024-04-05",

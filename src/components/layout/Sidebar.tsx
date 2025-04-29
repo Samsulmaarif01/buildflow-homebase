@@ -3,6 +3,7 @@ import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Kanban, ListCheck, Calendar, Users, FolderOpen } from "lucide-react";
 
+
 type SidebarProps = {
   isSidebarOpen: boolean;
   toggleSidebar: () => void;
@@ -41,7 +42,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, toggleSidebar }) => {
         <div className="flex h-full flex-col border-r border-border">
           {/* Logo */}
           <div className="flex h-16 items-center justify-center border-b border-border px-6">
-            <span className="text-2xl font-bold text-primary">BuildFlow</span>
+            <span className="text-2xl font-bold text-primary">RHI Build</span>
           </div>
 
           {/* Navigation */}
