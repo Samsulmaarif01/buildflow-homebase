@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Project } from "@/types";
 import { format } from "date-fns";
@@ -33,11 +34,7 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ project }) => {
           <h1 className="text-2xl font-bold md:text-3xl">{project.title}</h1>
           <p className="text-muted-foreground">Client: {project.client}</p>
         </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <span className={`status-badge px-3 py-1 ${getStatusColor(project.status)}`}>
-            {project.status.replace("_", " ")}
-          </span>
-        </div>
+        {/* Status badge will now be shown in ProjectProgress component */}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
