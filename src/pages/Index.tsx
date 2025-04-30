@@ -11,7 +11,7 @@ const Index = () => {
         <div>
           <h1 className="text-3xl font-bold">Project Dashboard</h1>
           <p className="text-muted-foreground">
-            Manage and monitor all your construction projects
+          Kelola dan pantau semua proyek konstruksi Anda.
           </p>
         </div>
 

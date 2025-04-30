@@ -56,7 +56,7 @@ const LoginPage = () => {
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center">Login</CardTitle>
           <CardDescription className="text-center">
-            Enter your credentials to access the dashboard
+          Masukkan kredensial Anda untuk mengakses dasbor.
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
@@ -94,8 +94,8 @@ const LoginPage = () => {
             <div className="text-xs text-muted-foreground">
               <p>Demo accounts:</p>
               <p>Admin: admin@example.com / admin123</p>
-              <p>Project Manager: maria@example.com / password123</p>
-              <p>Team Member: david@example.com / password123</p>
+              {/* <p>Project Manager: maria@example.com / password123</p>
+              <p>Team Member: david@example.com / password123</p> */}
             </div>
           </CardContent>
           <CardFooter>

@@ -14,7 +14,7 @@ const KanbanPage = () => {
         <div>
           <h1 className="text-3xl font-bold">Kanban Board</h1>
           <p className="text-muted-foreground">
-            Manage and track your tasks with the kanban board
+          Kelola dan lacak tugas Anda dengan papan Kanban.
           </p>
         </div>
         

@@ -28,7 +28,7 @@ type ProjectProgressProps = {
 };
 
 const ProjectProgress: React.FC<ProjectProgressProps> = ({ team }) => {
-  // In a real app, this data would come from a backend
+  //this data would come from a backend
   const memberProgress = team.map(member => ({
     member,
     progress: Math.floor(Math.random() * 100)

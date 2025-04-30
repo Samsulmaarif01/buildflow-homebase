@@ -27,7 +27,7 @@ const ProjectView = () => {
         <div className="flex h-full flex-col items-center justify-center">
           <h1 className="text-2xl font-bold">Project not found</h1>
           <p className="text-muted-foreground">
-            The project you're looking for doesn't exist or has been removed.
+          Proyek yang Anda cari tidak ada atau telah dihapus.
           </p>
           <Button asChild className="mt-4">
             <Link to="/">Go back to dashboard</Link>

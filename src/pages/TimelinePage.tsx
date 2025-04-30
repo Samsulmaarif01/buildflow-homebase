@@ -23,7 +23,7 @@ const TimelinePage = () => {
         <div>
           <h1 className="text-3xl font-bold">Project Timeline</h1>
           <p className="text-muted-foreground">
-            View and track project progress across the team
+          Lihat dan lacak kemajuan proyek di seluruh tim.
           </p>
         </div>
         

@@ -8,7 +8,7 @@ type ProjectMapProps = {
 };
 
 const ProjectMap: React.FC<ProjectMapProps> = ({ location }) => {
-  // In a real application, this would integrate with Google Maps API
+  //  this would integrate with Google Maps API
   return (
     <div className="relative overflow-hidden rounded-lg border border-border bg-muted h-60">
       <div className="absolute inset-0 flex flex-col items-center justify-center">
