@@ -57,7 +57,7 @@ const ProjectProgress: React.FC<ProjectProgressProps> = ({ team }) => {
     const anyStarted = memberProgress.some(mp => mp.progress > 0);
     if (anyStarted) return "IN_PROGRESS";
     
-    // Default state is planning
+    // Default state planning
     return "PLANNING";
   };
   
