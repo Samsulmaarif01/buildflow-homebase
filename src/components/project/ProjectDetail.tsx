@@ -34,11 +34,7 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ project }) => {
           <h1 className="text-2xl font-bold md:text-3xl">{project.title}</h1>
           <p className="text-muted-foreground">Client: {project.client}</p>
         </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <span className={`status-badge px-3 py-1 ${getStatusColor(project.status)}`}>
-            {project.status.replace("_", " ")}
-          </span>
-        </div>
+        {/* Status badge will now be shown in ProjectProgress component */}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -86,14 +82,6 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ project }) => {
           <CardTitle className="text-lg">Project Progress</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="mb-6">
-            <div className="flex items-center justify-between mb-1">
-              <span className="text-sm font-medium">Overall Progress</span>
-              <span className="text-sm font-medium">{project.progress}%</span>
-            </div>
-            <div className="progress-bar" style={{ "--progress-width": `${project.progress}%` } as React.CSSProperties} />
-          </div>
-          
           <ProjectProgress team={project.team} />
         </CardContent>
       </Card>
