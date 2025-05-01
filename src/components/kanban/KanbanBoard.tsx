@@ -17,6 +17,7 @@ type KanbanColumnProps = {
   color: string;
   columnId: string;
   projectId: string;
+  readOnly?: boolean;
 };
 
 const KanbanColumn: React.FC<KanbanColumnProps> = ({ 
@@ -24,7 +25,8 @@ const KanbanColumn: React.FC<KanbanColumnProps> = ({
   tasks, 
   color, 
   columnId,
-  projectId
+  projectId,
+  readOnly = false
 }) => {
   const [isAddTaskOpen, setIsAddTaskOpen] = useState(false);
   
@@ -43,18 +45,20 @@ const KanbanColumn: React.FC<KanbanColumnProps> = ({
             {tasks.length}
           </span>
         </div>
-        <Button 
-          variant="ghost" 
-          size="sm" 
-          className="h-8 w-8 p-0"
-          onClick={() => setIsAddTaskOpen(true)}
-        >
-          <Plus className="h-4 w-4" />
-          <span className="sr-only">Add task</span>
-        </Button>
+        {!readOnly && (
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="h-8 w-8 p-0"
+            onClick={() => setIsAddTaskOpen(true)}
+          >
+            <Plus className="h-4 w-4" />
+            <span className="sr-only">Add task</span>
+          </Button>
+        )}
       </div>
       
-      <Droppable droppableId={columnId}>
+      <Droppable droppableId={columnId} isDropDisabled={readOnly}>
         {(provided) => (
           <div 
             className="flex-1 overflow-y-auto p-2"
@@ -62,7 +66,12 @@ const KanbanColumn: React.FC<KanbanColumnProps> = ({
             {...provided.droppableProps}
           >
             {tasks.map((task, index) => (
-              <Draggable key={task.id} draggableId={task.id} index={index}>
+              <Draggable 
+                key={task.id} 
+                draggableId={task.id} 
+                index={index}
+                isDragDisabled={readOnly}
+              >
                 {(provided) => (
                   <div
                     ref={provided.innerRef}
@@ -79,15 +88,17 @@ const KanbanColumn: React.FC<KanbanColumnProps> = ({
         )}
       </Droppable>
 
-      <NewTaskDialog 
-        open={isAddTaskOpen}
-        onOpenChange={setIsAddTaskOpen}
-        projectId={projectId}
-        status={columnId}
-        assigneeId={defaultAssignee.id}
-        assigneeName={defaultAssignee.name}
-        assigneeRole={defaultAssignee.role}
-      />
+      {!readOnly && (
+        <NewTaskDialog 
+          open={isAddTaskOpen}
+          onOpenChange={setIsAddTaskOpen}
+          projectId={projectId}
+          status={columnId}
+          assigneeId={defaultAssignee.id}
+          assigneeName={defaultAssignee.name}
+          assigneeRole={defaultAssignee.role}
+        />
+      )}
     </div>
   );
 };
@@ -95,9 +106,10 @@ const KanbanColumn: React.FC<KanbanColumnProps> = ({
 type KanbanBoardProps = {
   tasks?: Task[];
   projectId?: string;
+  readOnly?: boolean;
 };
 
-const KanbanBoard: React.FC<KanbanBoardProps> = ({ projectId = "all" }) => {
+const KanbanBoard: React.FC<KanbanBoardProps> = ({ projectId = "all", readOnly = false }) => {
   const { tasks: allTasks, moveTask } = useTaskContext();
   
   // Safely handle the tasks array to prevent the filter error
@@ -135,6 +147,8 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ projectId = "all" }) => {
   ];
 
   const handleDragEnd = (result: any) => {
+    if (readOnly) return;
+    
     const { destination, source, draggableId } = result;
 
     // If there's no destination or the item was dropped back where it started
@@ -167,6 +181,7 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ projectId = "all" }) => {
                   color={column.color}
                   columnId={column.id}
                   projectId={projectId}
+                  readOnly={readOnly}
                 />
               ))}
             </div>

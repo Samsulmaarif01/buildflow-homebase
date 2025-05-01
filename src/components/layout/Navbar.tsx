@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Menu, Bell, Search, LogIn, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -11,18 +11,32 @@ import { useToast } from "@/components/ui/use-toast";
 
 type NavbarProps = {
   toggleSidebar: () => void;
+  searchTerm?: string;
+  onSearchChange?: (term: string) => void;
+  onProjectAdd?: (project: Project) => void;
 };
 
-const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
+const Navbar: React.FC<NavbarProps> = ({ 
+  toggleSidebar, 
+  searchTerm = "", 
+  onSearchChange = () => {}, 
+  onProjectAdd = () => {} 
+}) => {
   const navigate = useNavigate();
   const { currentUser, logout, isAuthenticated } = useAuth();
   const { toast } = useToast();
 
   const handleProjectCreate = (newProject: Project) => {
-    // In a real app, you'd likely dispatch this to a state management system 
-    // or send it to an API. For now, we'll just log it.
-    console.log("New Project Created:", newProject);
-    // You could also update the projects list in your data source
+    // Add the new project to the dashboard
+    onProjectAdd(newProject);
+    
+    toast({
+      title: "Project created",
+      description: `${newProject.title} has been created successfully`,
+    });
+    
+    // Navigate to the dashboard
+    navigate("/");
   };
 
   const handleLogout = () => {
@@ -36,6 +50,10 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
 
   const handleLogin = () => {
     navigate("/login");
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    onSearchChange(e.target.value);
   };
 
   return (
@@ -61,6 +79,8 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
             type="search"
             placeholder="Search projects..."
             className="w-full rounded-md border border-input bg-background pl-8 pr-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            value={searchTerm}
+            onChange={handleSearchChange}
           />
         </div>
 

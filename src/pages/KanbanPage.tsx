@@ -14,12 +14,12 @@ const KanbanPage = () => {
         <div>
           <h1 className="text-3xl font-bold">Kanban Board</h1>
           <p className="text-muted-foreground">
-          Kelola dan lacak tugas Anda dengan papan Kanban.
+            Kelola dan lacak tugas Anda dengan papan Kanban.
           </p>
         </div>
         
         <TaskProvider>
-          <KanbanBoard projectId={defaultProjectId} />
+          <KanbanBoard projectId={defaultProjectId} readOnly={true} />
         </TaskProvider>
       </div>
     </Layout>

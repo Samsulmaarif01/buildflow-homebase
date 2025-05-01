@@ -58,7 +58,7 @@ const ProjectView = () => {
           </TabsList>
           <TabsContent value="kanban" className="mt-4">
             <TaskProvider>
-              <KanbanBoard projectId={project.id} />
+              <KanbanBoard projectId={project.id} readOnly={false} />
             </TaskProvider>
           </TabsContent>
           <TabsContent value="discussion" className="mt-4">
