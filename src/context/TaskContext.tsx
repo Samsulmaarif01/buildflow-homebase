@@ -32,6 +32,9 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const allTodo = projectTasks.every(task => task.status === "TO_DO");
     if (allTodo) return "PLANNING";
     
+    const hasReview = projectTasks.some(task => task.status === "REVIEW");
+    if (hasReview) return "REVIEW";
+    
     return "IN_PROGRESS";
   }, [tasks]);
 
@@ -40,8 +43,19 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const projectTasks = tasks.filter(task => task.projectId === projectId);
     if (!projectTasks.length) return 0;
     
-    const completedTasks = projectTasks.filter(task => task.status === "DONE").length;
-    return Math.round((completedTasks / projectTasks.length) * 100);
+    // Weight tasks by status: DONE=100%, REVIEW=75%, IN_PROGRESS=50%, TO_DO=0%
+    const progressMap: Record<string, number> = {
+      DONE: 100,
+      REVIEW: 75,
+      IN_PROGRESS: 50,
+      TO_DO: 0
+    };
+    
+    const totalProgress = projectTasks.reduce((sum, task) => {
+      return sum + (progressMap[task.status] || 0);
+    }, 0);
+    
+    return Math.round(totalProgress / projectTasks.length);
   }, [tasks]);
 
   // Update projects based on task status
@@ -70,7 +84,10 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({ children
     toast({
       description: "Task status updated successfully",
     });
-  }, [toast]);
+    
+    // Immediately update projects after moving a task
+    setTimeout(() => updateProjectsBasedOnTasks(), 0);
+  }, [toast, updateProjectsBasedOnTasks]);
 
   const updateTask = useCallback((updatedTask: Task) => {
     setTasks((prevTasks) =>
@@ -82,7 +99,10 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({ children
     toast({
       description: "Task updated successfully",
     });
-  }, [toast]);
+    
+    // Immediately update projects after updating a task
+    setTimeout(() => updateProjectsBasedOnTasks(), 0);
+  }, [toast, updateProjectsBasedOnTasks]);
 
   const addTask = useCallback((task: Omit<Task, "id">) => {
     const newTask: Task = {
@@ -95,7 +115,10 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({ children
     toast({
       description: "New task added successfully",
     });
-  }, [toast]);
+    
+    // Immediately update projects after adding a task
+    setTimeout(() => updateProjectsBasedOnTasks(), 0);
+  }, [toast, updateProjectsBasedOnTasks]);
 
   return (
     <TaskContext.Provider

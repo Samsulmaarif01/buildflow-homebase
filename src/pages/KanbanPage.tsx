@@ -2,12 +2,20 @@
 import React, { useState } from "react";
 import Layout from "@/components/layout/Layout";
 import KanbanBoard from "@/components/kanban/KanbanBoard";
-import { TaskProvider } from "@/context/TaskContext";
-import { projects } from "@/data/mockData";
+import { TaskProvider, useTaskContext } from "@/context/TaskContext";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const KanbanPage = () => {
+  return (
+    <TaskProvider>
+      <KanbanPageContent />
+    </TaskProvider>
+  );
+};
+
+const KanbanPageContent = () => {
   const [selectedProjectId, setSelectedProjectId] = useState<string>("all");
+  const { projects } = useTaskContext();
   
   return (
     <Layout>
@@ -39,9 +47,7 @@ const KanbanPage = () => {
           </Select>
         </div>
         
-        <TaskProvider>
-          <KanbanBoard projectId={selectedProjectId} readOnly={false} />
-        </TaskProvider>
+        <KanbanBoard projectId={selectedProjectId} readOnly={false} />
       </div>
     </Layout>
   );

@@ -3,6 +3,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Project } from "@/types";
 import { formatDistanceToNow } from "date-fns";
+import { Progress } from "@/components/ui/progress";
 
 type ProjectCardProps = {
   project: Project;
@@ -31,7 +32,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
     >
       <div className="mb-3 flex items-center justify-between">
         <span
-          className={`status-badge ${getStatusColor(project.status)}`}
+          className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(project.status)}`}
         >
           {project.status.replace("_", " ")}
         </span>
@@ -50,7 +51,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
           <span>Progress</span>
           <span className="font-medium">{project.progress}%</span>
         </div>
-        <div className="progress-bar" style={{ "--progress-width": `${project.progress}%` } as React.CSSProperties} />
+        <Progress value={project.progress} className="h-2" />
       </div>
 
       <div className="mt-4 flex items-center justify-between">

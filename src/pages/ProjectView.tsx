@@ -1,7 +1,6 @@
 
 import React from "react";
 import { useParams } from "react-router-dom";
-import { projects, discussions } from "@/data/mockData";
 import Layout from "@/components/layout/Layout";
 import ProjectDetail from "@/components/project/ProjectDetail";
 import DiscussionForum from "@/components/forum/DiscussionForum";
@@ -10,10 +9,20 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { TaskProvider } from "@/context/TaskContext";
+import { TaskProvider, useTaskContext } from "@/context/TaskContext";
+import { discussions } from "@/data/mockData";
 
 const ProjectView = () => {
+  return (
+    <TaskProvider>
+      <ProjectViewContent />
+    </TaskProvider>
+  );
+};
+
+const ProjectViewContent = () => {
   const { id } = useParams<{ id: string }>();
+  const { projects } = useTaskContext();
   
   // Find the project by UUID
   const project = projects.find((p) => p.id === id);
@@ -57,9 +66,7 @@ const ProjectView = () => {
             <TabsTrigger value="discussion">Discussion</TabsTrigger>
           </TabsList>
           <TabsContent value="kanban" className="mt-4">
-            <TaskProvider>
-              <KanbanBoard projectId={project.id} readOnly={true} />
-            </TaskProvider>
+            <KanbanBoard projectId={project.id} readOnly={true} />
           </TabsContent>
           <TabsContent value="discussion" className="mt-4">
             <DiscussionForum discussions={projectDiscussions} projectId={project.id} />
