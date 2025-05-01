@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Layout from "@/components/layout/Layout";
 import ProjectDetail from "@/components/project/ProjectDetail";
@@ -22,7 +22,12 @@ const ProjectView = () => {
 
 const ProjectViewContent = () => {
   const { id } = useParams<{ id: string }>();
-  const { projects } = useTaskContext();
+  const { projects, updateProjectsBasedOnTasks } = useTaskContext();
+  
+  // Ensure project data is synchronized when component mounts
+  useEffect(() => {
+    updateProjectsBasedOnTasks();
+  }, [updateProjectsBasedOnTasks]);
   
   // Find the project by UUID
   const project = projects.find((p) => p.id === id);

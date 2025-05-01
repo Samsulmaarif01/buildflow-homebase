@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Task } from "@/types";
 import TaskCard from "./TaskCard";
 import { Plus } from "lucide-react";
@@ -110,7 +110,12 @@ type KanbanBoardProps = {
 };
 
 const KanbanBoard: React.FC<KanbanBoardProps> = ({ projectId = "all", readOnly = false }) => {
-  const { tasks: allTasks, moveTask } = useTaskContext();
+  const { tasks: allTasks, moveTask, updateProjectsBasedOnTasks } = useTaskContext();
+  
+  // Ensure we update projects when component mounts
+  useEffect(() => {
+    updateProjectsBasedOnTasks();
+  }, [updateProjectsBasedOnTasks]);
   
   // Safely handle the tasks array to prevent the filter error
   const taskList = allTasks || [];
@@ -158,9 +163,11 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ projectId = "all", readOnly =
       return;
     }
 
-    // Move the task to the new status
+    // Move the task to the new status and trigger update
     if (destination.droppableId !== source.droppableId) {
       moveTask(draggableId, destination.droppableId);
+      // We don't need an additional call to updateProjectsBasedOnTasks here
+      // as it's now called directly inside moveTask
     }
   };
 

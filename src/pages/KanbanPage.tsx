@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "@/components/layout/Layout";
 import KanbanBoard from "@/components/kanban/KanbanBoard";
 import { TaskProvider, useTaskContext } from "@/context/TaskContext";
@@ -15,7 +15,12 @@ const KanbanPage = () => {
 
 const KanbanPageContent = () => {
   const [selectedProjectId, setSelectedProjectId] = useState<string>("all");
-  const { projects } = useTaskContext();
+  const { projects, updateProjectsBasedOnTasks } = useTaskContext();
+  
+  // Ensure projects are updated when the component mounts or project selection changes
+  useEffect(() => {
+    updateProjectsBasedOnTasks();
+  }, [selectedProjectId, updateProjectsBasedOnTasks]);
   
   return (
     <Layout>

@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ProjectGrid from "@/components/dashboard/ProjectGrid";
 import Layout from "@/components/layout/Layout";
 import { useTaskContext } from "@/context/TaskContext";
@@ -18,6 +18,11 @@ const Index = () => {
 
 const IndexContent = ({ searchTerm, setSearchTerm }: { searchTerm: string, setSearchTerm: (term: string) => void }) => {
   const { projects, updateProjectsBasedOnTasks } = useTaskContext();
+  
+  // Ensure projects are updated when the component mounts
+  useEffect(() => {
+    updateProjectsBasedOnTasks();
+  }, [updateProjectsBasedOnTasks]);
   
   const filteredProjects = searchTerm 
     ? projects.filter(project => 

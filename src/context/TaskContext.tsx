@@ -58,7 +58,7 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return Math.round(totalProgress / projectTasks.length);
   }, [tasks]);
 
-  // Update projects based on task status
+  // Update projects based on task status - Synchronize immediately
   const updateProjectsBasedOnTasks = useCallback(() => {
     setProjects(prevProjects => 
       prevProjects.map(project => ({
@@ -69,10 +69,10 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({ children
     );
   }, [calculateProjectStatus, calculateProjectProgress]);
 
-  // Update projects whenever tasks change
+  // Ensure synchronization on initial load
   useEffect(() => {
     updateProjectsBasedOnTasks();
-  }, [tasks, updateProjectsBasedOnTasks]);
+  }, [updateProjectsBasedOnTasks]);
 
   const moveTask = useCallback((taskId: string, newStatus: string) => {
     setTasks((prevTasks) =>
@@ -81,12 +81,12 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({ children
       )
     );
 
+    // Immediate update - don't use setTimeout to ensure sync
+    updateProjectsBasedOnTasks();
+    
     toast({
       description: "Task status updated successfully",
     });
-    
-    // Immediately update projects after moving a task
-    setTimeout(() => updateProjectsBasedOnTasks(), 0);
   }, [toast, updateProjectsBasedOnTasks]);
 
   const updateTask = useCallback((updatedTask: Task) => {
@@ -96,12 +96,12 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({ children
       )
     );
 
+    // Immediate update - don't use setTimeout
+    updateProjectsBasedOnTasks();
+    
     toast({
       description: "Task updated successfully",
     });
-    
-    // Immediately update projects after updating a task
-    setTimeout(() => updateProjectsBasedOnTasks(), 0);
   }, [toast, updateProjectsBasedOnTasks]);
 
   const addTask = useCallback((task: Omit<Task, "id">) => {
@@ -112,12 +112,12 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     setTasks((prevTasks) => [...prevTasks, newTask]);
 
+    // Immediate update - don't use setTimeout
+    updateProjectsBasedOnTasks();
+    
     toast({
       description: "New task added successfully",
     });
-    
-    // Immediately update projects after adding a task
-    setTimeout(() => updateProjectsBasedOnTasks(), 0);
   }, [toast, updateProjectsBasedOnTasks]);
 
   return (
