@@ -1,12 +1,13 @@
 
-import React from "react";
+import React, { useState } from "react";
 import Layout from "@/components/layout/Layout";
 import KanbanBoard from "@/components/kanban/KanbanBoard";
 import { TaskProvider } from "@/context/TaskContext";
+import { projects } from "@/data/mockData";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const KanbanPage = () => {
-  // Using a default projectId for displaying all tasks in Kanban view
-  const defaultProjectId = "all";
+  const [selectedProjectId, setSelectedProjectId] = useState<string>("all");
   
   return (
     <Layout>
@@ -18,8 +19,28 @@ const KanbanPage = () => {
           </p>
         </div>
         
+        <div className="flex items-center space-x-2">
+          <p className="text-sm font-medium">Filter by Project:</p>
+          <Select
+            value={selectedProjectId}
+            onValueChange={(value) => setSelectedProjectId(value)}
+          >
+            <SelectTrigger className="w-[200px]">
+              <SelectValue placeholder="Select a project" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Projects</SelectItem>
+              {projects.map((project) => (
+                <SelectItem key={project.id} value={project.id}>
+                  {project.title}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        
         <TaskProvider>
-          <KanbanBoard projectId={defaultProjectId} readOnly={true} />
+          <KanbanBoard projectId={selectedProjectId} readOnly={true} />
         </TaskProvider>
       </div>
     </Layout>

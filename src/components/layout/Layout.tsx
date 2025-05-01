@@ -25,7 +25,7 @@ const Layout: React.FC<LayoutProps> = ({
 
   return (
     <div className="flex min-h-screen bg-background">
-      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <Sidebar isSidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
       
       <div className="flex-1 flex flex-col">
         <Navbar 
