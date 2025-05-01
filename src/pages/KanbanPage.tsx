@@ -40,7 +40,7 @@ const KanbanPage = () => {
         </div>
         
         <TaskProvider>
-          <KanbanBoard projectId={selectedProjectId} readOnly={true} />
+          <KanbanBoard projectId={selectedProjectId} readOnly={false} />
         </TaskProvider>
       </div>
     </Layout>
